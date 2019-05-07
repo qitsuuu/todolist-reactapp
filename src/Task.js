@@ -8,6 +8,7 @@ class Task extends Component {
     this.state = {
       task: props.task,
       edit: false,
+      isDone: false,
       items: props.task.items
     };
 
@@ -15,24 +16,25 @@ class Task extends Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDeleteItem = this.handleDeleteItem.bind(this);
+    this.testClick = this.testClick.bind(this);
   }
 
   onUpdate(id) {
     this.setState({ edit: true });
-    console.log(this.state.edit, id);
+    console.log("edit : ", this.state.edit, id);
   }
 
   handleUpdate(taskChanges, id) {
     const arr = this.state.task;
     arr[id] = taskChanges;
 
+    console.log("updating", arr, taskChanges);
     const newTask = {
       id: this.state.task.id,
       value: taskChanges
     };
 
     this.setState({ task: newTask, edit: false });
-    console.log(this.state.task);
   }
 
   handleAddItem() {
@@ -51,26 +53,38 @@ class Task extends Component {
     this.setState({ items });
   }
 
-  editView() {
-    return (
-      <div>
-        <textarea ref="taskChanges" defaultValue={this.state.task.value} />
-        <button
-          onClick={() =>
-            this.handleUpdate(this.refs.taskChanges.value, "value")
-          }
-        >
-          Save
-        </button>
-      </div>
-    );
+  testClick() {
+    const { isDone } = this.state;
+    if (isDone === false) {
+      this.setState({ isDone: true });
+    }
+    if (isDone === true) {
+      this.setState({ isDone: false });
+    }
+  }
+
+  doneClass() {
+    let classes = "plain";
+
+    const { isDone, task } = this.state;
+    if (isDone === true) {
+      classes -= "plain";
+      classes += " doneClass";
+      console.log("truee : checked " + task.id);
+      return classes;
+    } else if (isDone === false) {
+      console.log("fallsssee");
+      return classes;
+    }
   }
 
   normalView() {
     const { task } = this.state;
     return (
       <div>
-        <h3>{task.value}</h3>
+        <h2 className={this.doneClass()} onClick={this.testClick}>
+          {task.value}
+        </h2>
         <button onClick={this.handleAddItem}>+</button>
         <button onClick={() => this.props.onRemove(task.id)}>x</button>
         <button onClick={() => this.onUpdate(task.id)}>Edit</button>
@@ -87,7 +101,23 @@ class Task extends Component {
     );
   }
 
+  editView() {
+    return (
+      <div>
+        <textarea ref="taskChanges" defaultValue={this.state.task.value} />
+        <button
+          onClick={() =>
+            this.handleUpdate(this.refs.taskChanges.value, "value")
+          }
+        >
+          Save
+        </button>
+      </div>
+    );
+  }
+
   render() {
+    // console.log("rendering");
     const { edit } = this.state;
     if (edit === true) {
       return this.editView();

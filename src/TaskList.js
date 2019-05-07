@@ -37,7 +37,18 @@ class TaskList extends Component {
     this.setState({ tasks });
   }
 
+  // shouldComponentUpdate(nextState) {
+  //   if (nextState.tasks !== this.state.tasks) {
+  //     console.log("State mount", this.state.tasks);
+  //     return true;
+  //     // } else if (nextProps.input !== this.props.input) {
+  //     //   console.log("Props mount", this.props.input);
+  //     //   return true;
+  //   }
+  // }
+
   render() {
+    console.log(new Date().getMonth() + 1);
     const { input } = this.state;
     return (
       <div>

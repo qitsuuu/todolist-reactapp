@@ -54,19 +54,8 @@ class TaskItem extends Component {
     );
   }
 
-  //   shouldComponentUpdate(nextProps, nextState) {
-  //     const { edit } = nextState;
-  //     if (edit === true) {
-  //       return true;
-  //     } else if (edit === false) {
-  //       return false;
-  //     }
-
-  //     return false;
-  //   }
-
   render() {
-    console.log("test");
+    console.log("rendering");
     const { edit } = this.state;
     if (edit === true) {
       return this.editView();
