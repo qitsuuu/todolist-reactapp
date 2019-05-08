@@ -8,7 +8,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.col-sm {
+  border: 0.5px solid lightgray;
+  height: 100px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+ul li {
+  list-style: none;
+}
+
+.done {
+  -webkit-text-fill-color: green;
+  text-decoration: line-through;
+  font-size: 25px;
+}
+
+.plain {
+  font-size: 25px;
+  -webkit-text-fill-color: rgb(255, 153, 0);
+}
+
+.drag {
+  cursor: move;
 }
