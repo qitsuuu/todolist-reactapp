@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://qitsuuu.github.io/todolist-reactapp/",
   "dependencies": {
-    "mdbootstrap": "^4.7.6",
+    "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8"
