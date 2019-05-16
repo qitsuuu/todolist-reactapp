@@ -2,6 +2,7 @@
   "name": "todo101",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://qitsuuu.github.io/todolist-reactapp/",
   "dependencies": {
     "mdbootstrap": "^4.7.6",
     "react": "^16.8.6",
@@ -12,6 +13,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
