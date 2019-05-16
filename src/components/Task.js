@@ -2,17 +2,6 @@ import React, { Component } from "react";
 import TaskItem from "./TaskItem";
 
 class Task extends Component {
-  // handleAddItem() {
-  //   const { task, items } = this.state;
-  //   const newTask = {
-  //     id: Date.now(),
-  //     value: "new item"
-  //   };
-
-  //   this.setState({ items: items.concat(newTask) });
-  //   console.log(items);
-  // }
-
   constructor(props) {
     super(props);
 
@@ -28,19 +17,18 @@ class Task extends Component {
       onUpdate,
       onUpdateItem,
       onFinished,
-      // onDoneClass,
       onDragStart,
       onRemoveItem,
       onhandleAddItem
     } = this.props;
     return (
       <div
-        className="border drag"
+        className="draggable"
+        style={{ backgroundColor: task.bgcolor }}
         id={task.value}
         draggable
-        onDragStart={onDragStart}
+        onDragStart={e => onDragStart(e, task.value)}
       >
-        {/* <button onClick={() => this.state.func("Qit")}>TESTER</button> */}
         <input
           checked={task.selected}
           type="checkbox"

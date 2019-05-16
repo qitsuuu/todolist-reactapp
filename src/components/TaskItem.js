@@ -6,7 +6,7 @@ class TaskItem extends Component {
     return (
       <div>
         <span
-          className="plain m-3"
+          className="item m-3"
           id={item.id}
           contentEditable={true}
           suppressContentEditableWarning={true}

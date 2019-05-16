@@ -24,7 +24,6 @@ class TaskList extends Component {
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleUpdateItem = this.handleUpdateItem.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
-    this.testfunc = this.testfunc.bind(this);
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
@@ -36,6 +35,15 @@ class TaskList extends Component {
   }
 
   handleAdd() {
+    const colors = [
+      "lightyellow",
+      "skyblue",
+      "lightgray",
+      "pink",
+      "lightpink",
+      "wheat"
+    ];
+    const max = colors.length - 1;
     const { tasks, text } = this.state;
     const newText = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
     const invalid = tasks.filter(t => t.value === newText).length;
@@ -49,6 +57,7 @@ class TaskList extends Component {
         id: Date.now(),
         value: newText,
         status: "new",
+        bgcolor: colors[Math.round(Math.random() * (+max - 0))],
         selected: false,
         items: []
       };
@@ -146,15 +155,6 @@ class TaskList extends Component {
     this.setState({ tasks });
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (this.state !== nextState) {
-  //     return true;
-  //   } else if (this.state === nextState) {
-  //     console.log("Don't update");
-  //     return false;
-  //   }
-  // }
-
   componentDidMount() {
     // localStorage.clear();
     this.loadStateFromLocalStorage();
@@ -163,7 +163,7 @@ class TaskList extends Component {
       "beforeunload",
       this.saveStateToLocalStorage.bind(this)
     );
-    // console.log("Did Mounted");
+    console.log("Did Mounted");
   }
 
   componentWillUnmount() {
@@ -195,43 +195,66 @@ class TaskList extends Component {
     }
   }
 
-  testfunc(name) {
-    console.log(`Hello ${name}`);
-  }
+  // DRAG AND DROP
 
   handleDragOver(ev) {
     ev.preventDefault();
-    console.log("just dragged over");
+    console.log("dragged over");
   }
 
-  handleDragStart(e) {
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text", e.target.id);
-    // e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
-    console.log("start dragging", e.target.id);
+  handleDragStart(ev, task) {
+    ev.dataTransfer.setData("task", task);
+
+    console.log(task);
   }
 
-  handleDrop(ev) {
+  handleDrop(ev, status) {
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-    console.log("just dropped", data);
+    let task = ev.dataTransfer.getData("task");
+
+    let tasks = this.state.tasks.filter(t => {
+      if (t.value === task) {
+        t.status = status;
+      }
+      console.log("dropped", task);
+      return t;
+    });
+
+    this.setState({ ...this.state, tasks });
   }
 
   render() {
-    // console.log(
-    //   "new ",
-    //   this.state.tasks,
-    //   " finished ",
-    //   this.state.finishedTasks
-    // );
-    let { text, tasks } = this.state;
-    let ntasks = tasks.filter(task => task.status === "new");
-    let ftasks = tasks.filter(task => task.status === "finished");
+    const { text, tasks } = this.state;
+    const tasklist = {
+      new: [],
+      finished: [],
+      wip: []
+    };
+
+    tasks.forEach(task => {
+      tasklist[task.status].push(
+        <Task
+          key={task.id}
+          state={this.state}
+          task={task}
+          onRemove={this.handleRemove}
+          onUpdate={this.handleUpdate}
+          onAdd={this.handleAdd}
+          onFinished={this.handleFinished}
+          onDoneClass={this.doneClass}
+          onChange={this.handleChange}
+          onhandleAddItem={this.handleAddItem}
+          onUpdateItem={this.handleUpdateItem}
+          onRemoveItem={this.handleRemoveItem}
+          onDragStart={this.handleDragStart}
+        />
+      );
+    });
+
     return (
       <div className="container">
         <div className="row">
-          <div className="col-sm-12 p-0">
+          <div className="col-sm-12 p-5 toolbar">
             <input
               className="offset-md-4 w-25"
               type="text"
@@ -246,78 +269,30 @@ class TaskList extends Component {
             </button>
           </div>
           <div
-            className="col-sm"
-            onDrop={this.handleDrop}
-            onDragOver={this.handleDragOver}
-            width="88"
-            height="31"
+            className="col-sm-4 new"
+            onDragOver={e => this.handleDragOver(e)}
+            onDrop={e => this.handleDrop(e, "new")}
           >
-            <h4
-              id="new"
-              className="drag"
-              draggable
-              onDragStart={this.handleDragStart}
-            >
-              NEW
-            </h4>
-            <ul>
-              {ntasks.map(task => (
-                <li key={task.id}>
-                  <Task
-                    state={this.state}
-                    task={task}
-                    onRemove={this.handleRemove}
-                    onUpdate={this.handleUpdate}
-                    onAdd={this.handleAdd}
-                    onFinished={this.handleFinished}
-                    onDoneClass={this.doneClass}
-                    onChange={this.handleChange}
-                    onhandleAddItem={this.handleAddItem}
-                    onUpdateItem={this.handleUpdateItem}
-                    onRemoveItem={this.handleRemoveItem}
-                    onDragStart={this.handleDragStart}
-                    testfunc={this.testfunc}
-                  />
-                </li>
-              ))}
-            </ul>
+            <h3 className="header">New</h3>
+            {tasklist.new}
           </div>
-          <hr />
 
           <div
-            className="col-sm"
-            onDrop={this.handleDrop}
-            onDragOver={this.handleDragOver}
+            className="col-sm-4 wip"
+            onDragOver={e => this.handleDragOver(e)}
+            onDrop={e => this.handleDrop(e, "wip")}
           >
-            <h4
-              id="finished"
-              className="drag"
-              draggable
-              onDragStart={this.handleDragStart}
-            >
-              FINISHED
-            </h4>
-            <ul>
-              {ftasks.map(task => (
-                <li key={task.id}>
-                  <Task
-                    state={this.state}
-                    task={task}
-                    onRemove={this.handleRemove}
-                    onUpdate={this.handleUpdate}
-                    onAdd={this.handleAdd}
-                    taskChanges={this.taskChanges}
-                    onFinished={this.handleFinished}
-                    onDoneClass={this.doneClass}
-                    onChange={this.handleChange}
-                    onhandleAddItem={this.handleAddItem}
-                    onUpdateItem={this.handleUpdateItem}
-                    onRemoveItem={this.handleRemoveItem}
-                    onDragStart={this.handleDragStart}
-                  />
-                </li>
-              ))}
-            </ul>
+            <h3 className="header">WIP</h3>
+            {tasklist.wip}
+          </div>
+
+          <div
+            className="col-sm-4 finished"
+            onDragOver={e => this.handleDragOver(e)}
+            onDrop={e => this.handleDrop(e, "finished")}
+          >
+            <h3 className="header">Finished</h3>
+            {tasklist.finished}
           </div>
         </div>
       </div>

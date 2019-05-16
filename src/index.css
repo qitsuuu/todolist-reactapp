@@ -33,6 +33,41 @@ ul li {
   -webkit-text-fill-color: rgb(255, 153, 0);
 }
 
-.drag {
+.draggable {
+  border-radius: 10px;
   cursor: move;
+  width: 100%;
+  margin: 5px auto;
+  padding: 10px;
+}
+
+.new {
+  position: absolute;
+  background-color: lightgreen;
+  padding: 5px;
+}
+
+.wip {
+  background-color: lightseagreen;
+  padding: 5px;
+}
+
+.finished {
+  background-color: teal;
+  padding: 5px;
+}
+
+.header {
+  -webkit-text-fill-color: white;
+  text-align: center;
+  width: 100%;
+  box-shadow: 0px 1px 0px 0;
+}
+
+.toolbar {
+  background-color: lightsalmon;
+}
+
+.item {
+  font-size: 1.2em;
 }
