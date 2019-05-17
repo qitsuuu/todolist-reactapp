@@ -2,7 +2,7 @@
   "name": "todo101",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://qitsuuu.github.io/todolist-reactapp/",
+  "homepage": "https://qitsuuu.github.io/todolist-reactapp/public",
   "dependencies": {
     "gh-pages": "^2.0.1",
     "react": "^16.8.6",
